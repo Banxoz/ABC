@@ -1,0 +1,54 @@
+#include <iostream>
+#include <bitset> 
+#include <Windows.h>
+
+using namespace std;
+//перевод в IEEE754
+void IEEE754(float value) {
+
+    union {
+        float f;
+        uint32_t i;
+    } converter;
+    converter.f = value;
+    bitset<32> bits(converter.i);
+    cout << bits << endl;
+}
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    int count;
+    cout << " Сколько чисел вы хотите ввести? ";
+    cin >> count;
+
+    if (count <= 0) {
+        cout << " Количество чисел должно быть больше 0." << endl;
+        return 0;
+    }
+
+    float* numbers = new float[count];
+
+    cout << " Введите " << count << " чисел:"<<"\n";
+    for (int i = 0; i < count; ++i) {
+        cin>> numbers[i];
+    }
+
+    float max = numbers[0];
+    for (int i = 1; i < count; ++i) {
+        if (numbers[i] > max) {
+            max = numbers[i];
+        }
+    }
+    cout << " Максимальное значение: " << max << endl;
+    cout << " Числа в формате IEEE 754:" << endl;
+    for (int i = 0; i < count; ++i) {
+        cout << numbers[i] << " -> ";
+        IEEE754(numbers[i]);
+    }
+
+    cout << " Максимальное значение в формате IEEE 754: ";
+    IEEE754(max);
+    delete[] numbers;
+    return 0;
+}
