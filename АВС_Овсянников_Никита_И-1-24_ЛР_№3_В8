@@ -1,0 +1,118 @@
+#include <iostream>
+#include <bitset>
+#include <string>
+#include <cmath>
+#include <iomanip>
+#include <Windows.h>
+using namespace std;
+
+// Функция для перевода числа из двоичной системы в десятичную
+int binaryToDecimal(const string& binary) {
+    return bitset<32>(binary).to_ulong();
+}
+
+// Функция для перевода числа из десятичной системы в двоичную
+string decimalToBinary(int decimal) {
+    return bitset<32>(decimal).to_string();
+}
+
+// Функция для перевода числа из шестнадцатеричной системы в десятичную
+int hexToDecimal(const string& hex) {
+    return stoul(hex, nullptr, 16);
+}
+
+// Функция для перевода числа из семеричной системы в десятичную
+int septenaryToDecimal(const string& septenary) {
+    int decimal = 0;
+    for (size_t i = 0; i < septenary.length(); ++i) {
+        int digit = septenary[i] - '0';
+        decimal += digit * pow(7, septenary.length() - i - 1);
+    }
+    return decimal;
+}
+
+// Функция для выполнения операции и вывода результата
+void performOperation(const string& num1, const string& num2, const string& operation, const string& base) {
+    int decimalNum1, decimalNum2;
+
+    // Перевод чисел в десятичную систему в зависимости от системы счисления
+    if (base == "10") {
+        decimalNum1 = stoi(num1);
+        decimalNum2 = stoi(num2);
+    }
+    else if (base == "16") {
+        decimalNum1 = hexToDecimal(num1);
+        decimalNum2 = hexToDecimal(num2);
+    }
+    else if (base == "7") {
+        decimalNum1 = septenaryToDecimal(num1);
+        decimalNum2 = septenaryToDecimal(num2);
+    }
+    else {
+        cout << "Неизвестная система счисления!" << endl;
+        return;
+    }
+
+    // Перевод чисел в двоичную систему
+    string binaryNum1 = decimalToBinary(decimalNum1);
+    string binaryNum2 = decimalToBinary(decimalNum2);
+
+    cout << num1 << " в двоичной системе: " << binaryNum1 << endl;
+    cout << num2 << " в двоичной системе: " << binaryNum2 << endl;
+
+    // Выполнение арифметической операции
+    int resultDecimal;
+    if (operation == "+") {
+        resultDecimal = decimalNum1 + decimalNum2;
+    }
+    else if (operation == "-") {
+        resultDecimal = decimalNum1 - decimalNum2;
+    }
+    else if (operation == "*") {
+        resultDecimal = decimalNum1 * decimalNum2;
+    }
+  
+
+    string resultBinary = decimalToBinary(resultDecimal);
+
+    cout << "Результат " << operation << " в двоичной системе: " << resultBinary << endl;
+    cout << "Результат " << operation << " в десятичной системе: " << resultDecimal << endl;
+
+    // Вывод результата в исходной системе счисления
+    if (base == "10") {
+        cout << "Результат " << operation << " в десятичной системе: " << resultDecimal << endl;
+    }
+    else if (base == "16") {
+        cout << "Результат " << operation << " в шестнадцатеричной системе: " << hex << resultDecimal << endl;
+    }
+    else if (base == "7") {
+        cout << "Результат " << operation << " в семеричной системе: " << oct << resultDecimal << endl;
+    }
+    cout << endl;
+}
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    // Пример 1: 66324 - 12090 (десятичная система)
+    cout << "Пример 1: 66324 - 12090 (десятичная система)" << endl;
+    performOperation("66324", "12090", "-", "10");
+
+    // Пример 2: 1335 + 4635 (десятичная система)
+    cout << "Пример 2: 1335 + 4635 (десятичная система)" << endl;
+    performOperation("1335", "4635", "+", "10");
+
+    // Пример 3: FAE1 - 123 (шестнадцатеричная система)
+    cout << "Пример 3: FAE1 - 123 (шестнадцатеричная система)" << endl;
+    performOperation("FAE1", "123", "-", "16");
+
+    // Пример 4: 2444 - 2241 (семеричная система)
+    cout << "Пример 4: 2444 - 2241 (семеричная система)" << endl;
+    performOperation("2444", "2241", "-", "7");
+
+    // Пример 5: 13 * 7 (десятичная система)
+    cout << "Пример 5: 13 * 7 (десятичная система)" << endl;
+    performOperation("13", "7", "*", "10");
+
+    return 0;
+}
